@@ -2,4 +2,5 @@
 
 ### Packages:
 
-- Debugbar 
+- Debugbar
+- Sail (mysql, redis, mailpit)
