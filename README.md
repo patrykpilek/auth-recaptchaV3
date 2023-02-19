@@ -4,3 +4,4 @@
 
 - Debugbar
 - Sail (mysql, redis, mailpit)
+- Breeze & Blade
