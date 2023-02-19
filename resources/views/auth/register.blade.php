@@ -39,23 +39,37 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <div>
+            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+            <x-input-error :messages="$errors->get('g-recaptcha-response')" class="mt-2" />
+        </div>
+
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="g-recaptcha ml-4"
-                              data-sitekey="{{ config('services.recaptcha.site_key') }}"
-                              data-callback='onSubmit'
-                              data-action='register'>
+            <x-primary-button class="ml-4" type="button" onclick="onClick(event)">
                 {{ __('Register') }}
             </x-primary-button>
         </div>
     </form>
     @push('scripts')
+{{--        <script>--}}
+{{--            function onSubmit(token) {--}}
+{{--                document.getElementById("registerForm").submit();--}}
+{{--            }--}}
+{{--        </script>--}}
         <script>
-            function onSubmit(token) {
-                document.getElementById("registerForm").submit();
+            function onClick(e) {
+                e.preventDefault();
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'register'}).then(function(token) {
+                        // Add your logic to submit to your backend server here.
+                        document.getElementById('g-recaptcha-response').value = token;
+                        document.getElementById("registerForm").submit();
+                    });
+                });
             }
         </script>
     @endpush
